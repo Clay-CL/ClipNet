@@ -1,33 +1,33 @@
 import express from 'express';
 import dotenv from 'dotenv';
-const ClipboardListener = require('clipboard-listener');
+import { createServer } from "http";
+import { Server, Socket, } from "socket.io";
+import cors from 'cors';
+import { DefaultEventsMap } from 'socket.io/dist/typed-events';
+import ClipboardData from './models/clipboard.model';
 
 dotenv.config()
-const port = process.env.PORT || 3000
+const port = process.env.SERVER_PORT || 3000
 
 const app = express();
-
-let clipboardData: any;
-
-const clipboardListener = new ClipboardListener({
-    timeInterval: 100, // Default to 250
-    immediate: true, // Default is false
+app.use(cors());
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+    /* options here */
 });
 
-const startListening = () => {
-    console.log("Started Listening to Clipboard");
-    clipboardListener.on('change', (value: any) => {
-        clipboardData = value;
-        console.log(value);
+// listen to events
+const listen = (socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap>) => {
+    socket.on("clipboard-send", (data: ClipboardData) => {
+        console.log(`Clipboard Data ${data.clipboard} from socket ${socket}`);
+        socket.broadcast.emit("clipboard-receive", data)
     });
 }
 
-app.get("/", (req, res) => {
-    let message = "Hello World";
-    res.status(200).send({ message, clipboardData });
+io.on("connection", (socket) => {
+    listen(socket)
 });
 
-app.listen(port, () => {
+httpServer.listen(port, () => {
     console.log(`Connected and Listening on Port : ${port}`);
-    startListening()
 });
