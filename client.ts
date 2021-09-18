@@ -40,7 +40,7 @@ const initSocket = () => {
     socket.on("connection", (...args) => {
         console.log("Connected to Server");
     });
-    socket.on("clipboard-recceive", (data: ClipboardData) => {
+    socket.on("clipboard-receive", (data: ClipboardData) => {
         console.log(`Data received ${data.clipboard} from socket ${socket}`);
         clipboardy.writeSync(data.clipboard);
     });
