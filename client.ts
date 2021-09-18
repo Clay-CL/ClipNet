@@ -6,14 +6,15 @@ import ClipboardData from './models/clipboard.model';
 import { uuid } from 'uuidv4';
 import clipboardy from 'clipboardy';
 
-const socket = io("http://localhost:3000");
-
 const app = express()
 
 const ClipboardListener = require('clipboard-listener');
 
 dotenv.config()
 const port = process.env.PORT || 3001
+const serverUrl = process.env.SERVER_BASE_URL || "http://localhost:3000"
+
+const socket = io(serverUrl);
 
 let clipboardData: any;
 
