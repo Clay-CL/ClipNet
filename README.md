@@ -34,3 +34,8 @@ npm start
 npm run start-client
 ```
 
+# License
+Copyright (c) 2021 Clay Motupalli
+
+Code released under the [MIT License](https://github.com/Clay-CL/ClipNet/blob/master/LICENSE) 
+
