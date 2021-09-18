@@ -45,6 +45,9 @@ const initSocket = () => {
         console.log(`Data received ${data.clipboard} from socket ${socket}`);
         clipboardy.writeSync(data.clipboard);
     });
+    socket.on("disconnect", () => {
+        console.log("Disconnected from server");
+    });
 }
 
 app.listen(port, () => {
